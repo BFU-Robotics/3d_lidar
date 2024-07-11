@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<robot name="lidar" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.05 0.2 0.01"/>
+      </geometry>
+      <material name="white">
+        <color rgba="1 1 1 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <link name="rotation_link">
+    <visual>
+      <geometry>
+        <box size="0.05 0.05 0.04"/>
+      </geometry>
+      <material name="blue">
+        <color rgba="0 0 .5 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="rotation_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="rotation_link"/>
+    <origin xyz="0 0 0.05"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="1000.0" lower="0.0" upper="3.141592" velocity="1"/>
+  </joint>
+
+  <link name="lidar_link">
+    <visual>
+      <geometry>
+        <cylinder length="0.035" radius="0.02"/>
+      </geometry>
+      <material name="blue">
+        <color rgba="0 .5 0 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <joint name="lidar_joint" type="fixed">
+    <parent link="rotation_link"/>
+    <child link="lidar_link"/>
+    <origin xyz="0 0 0.029" rpy="-0.01745 0 0"/>
+  </joint>
+
+</robot>

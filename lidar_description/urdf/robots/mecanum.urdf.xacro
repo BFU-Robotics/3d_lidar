@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<robot name="pivozavr" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find pivozavr_description)/urdf/mecanum_properties.urdf.xacro" />
+  <xacro:include filename="$(find pivozavr_description)/urdf/sensors/generic_laser.urdf.xacro" />
+  <xacro:include filename="$(find pivozavr_description)/urdf/sensors/depth_sensor.urdf.xacro" />
+  
+    <xacro:macro name="base" params="length width height mass wheel_radius wheel_pos_z">
+    <link name="base_footprint"/>
+    
+    <link name="base_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="${length} ${width} ${height}"/>
+          <!-- <mesh filename="" scale="0.001 0.001 0.001"/> -->
+        </geometry>
+        <material name="yellow">
+          <color rgba="0.8784 0.6627 0.6627 1.0"/>
+        </material>
+      </visual>
+      
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="${length} ${width} ${height}"/>
+        </geometry>
+      </collision>
+
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="${mass}"/>
+        <inertia ixx="${(1/12) * mass * ((width  * width)  + (height * height))}" ixy="0.0" ixz="0.0"
+                 iyy="${(1/12) * mass * ((length * length) + (height * height))}" iyz="0.0"
+                 izz="${(1/12) * mass * ((length * length) + (width  * width))}"/>
+      </inertial>
+    </link>
+
+    <gazebo reference="base_link">  
+      <visual>  
+        <material>
+          <ambient>0.8392 0.6314 0.0 1.0</ambient>  
+          <diffuse>0.8392 0.6314 0.0 1.0</diffuse>  
+          <specular>0.99 0.99 0.99 1.0</specular>  
+          <emissive>0.0 0.0 0.0 0.0</emissive>  
+        </material>
+      </visual> 
+    </gazebo>
+
+    <joint name="base_to_footprint" type="fixed">
+      <parent link="base_footprint"/>
+      <child link="base_link"/>
+      <origin xyz="0 0 ${wheel_radius - wheel_pos_z}" rpy="0 0 0"/>
+    </joint>
+  </xacro:macro>
+
+  <!--<xacro:generic_laser>
+    <xacro:insert_block name="laser_pose" />
+  </xacro:generic_laser>-->
+
+</robot>
